@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class House extends Model
 {
-    protected $fillable = ['address', 'name'];
+    protected $fillable = ['address', 'name', 'rate'];
 
     public function flats()
     {
