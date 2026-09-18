@@ -29,11 +29,14 @@
                         <ul class="list-group">
                             @foreach($flat->counters as $counter)
                                 <li class="list-group-item">
-                                    {{ $counter->resource->name }}
-                                    <a href="/counters/{{ $counter->id }}" class="btn btn-sm btn-outline-primary float-end">Просмотр</a>
-                                    <a href="/flats/{{ $flat->id }}/counters" class="btn btn-info mt-2">Показания счетчиков</a>
-                                    <a href="/flats/{{ $flat->id }}/services" class="btn btn-warning mt-2">Подключенные услуги</a>
-                                    <a href="/flats/{{ $flat->id }}/payments" class="btn btn-success mt-2">История платежей</a>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+										<strong>{{ $counter->resource->name }}</strong>
+										<a href="/counters/{{ $counter->id }}" class="btn btn-sm btn-outline-primary">Просмотр</a>
+									</div>
+									<div>
+										<a href="/flats/{{ $flat->id }}/counters" class="btn btn-info btn-sm">Показания счетчиков</a>
+										<a href="/flats/{{ $flat->id }}/payments" class="btn btn-success btn-sm">История платежей</a>
+									</div>
                                 </li>
                             @endforeach
                         </ul>

@@ -16,12 +16,20 @@
                             @method('PUT')
 
                             <div class="mb-3">
-                                <label for="flat_id" class="form-label">Квартира *</label>
-                                <select class="form-select" id="flat_id" name="flat_id" required>
-                                    @foreach($flats as $flat)
-                                        <option value="{{ $flat->id }}"
-                                            {{ $payment->flat_id == $flat->id ? 'selected' : '' }}>
-                                            Кв. {{ $flat->number }} - Дом {{ $flat->house->name ?? 'N/A' }}
+                                <label class="form-label">Квартира</label>
+                                <input type="text" class="form-control"
+                                       value="Кв. {{ $payment->flat->number }} — {{ $payment->flat->house->name ?? 'N/A' }}"
+                                       disabled>
+                                <small class="text-muted">Квартиру изменить нельзя</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="id_period" class="form-label">Период *</label>
+                                <select class="form-select" id="id_period" name="id_period" required>
+                                    @foreach($periods as $period)
+                                        <option value="{{ $period->id }}"
+                                            {{ $payment->id_period == $period->id ? 'selected' : '' }}>
+                                            {{ $period->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -31,38 +39,6 @@
                                 <label for="sum" class="form-label">Сумма *</label>
                                 <input type="number" step="0.01" class="form-control"
                                        id="sum" name="sum" value="{{ old('sum', $payment->sum) }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="payment_date" class="form-label">Дата платежа *</label>
-                                <input type="date" class="form-control"
-                                       id="payment_date" name="payment_date"
-                                       value="{{ old('payment_date', $payment->payment_date ? $payment->payment_date->format('Y-m-d') : '') }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="type" class="form-label">Тип платежа *</label>
-                                <select class="form-select" id="type" name="type" required>
-                                    <option value="коммунальные" {{ ($payment->type ?? '') == 'коммунальные' ? 'selected' : '' }}>Коммунальные</option>
-                                    <option value="аренда" {{ ($payment->type ?? '') == 'аренда' ? 'selected' : '' }}>Аренда</option>
-                                    <option value="капитальный ремонт" {{ ($payment->type ?? '') == 'капитальный ремонт' ? 'selected' : '' }}>Капитальный ремонт</option>
-                                    <option value="дополнительные услуги" {{ ($payment->type ?? '') == 'дополнительные услуги' ? 'selected' : '' }}>Дополнительные услуги</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="status" class="form-label">Статус *</label>
-                                <select class="form-select" id="status" name="status" required>
-                                    <option value="оплачен" {{ ($payment->status ?? '') == 'оплачен' ? 'selected' : '' }}>Оплачен</option>
-                                    <option value="ожидание" {{ ($payment->status ?? '') == 'ожидание' ? 'selected' : '' }}>Ожидание</option>
-                                    <option value="просрочен" {{ ($payment->status ?? '') == 'просрочен' ? 'selected' : '' }}>Просрочен</option>
-                                    <option value="отменен" {{ ($payment->status ?? '') == 'отменен' ? 'selected' : '' }}>Отменен</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Описание</label>
-                                <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $payment->description ?? '') }}</textarea>
                             </div>
 
                             <div class="d-flex gap-2">

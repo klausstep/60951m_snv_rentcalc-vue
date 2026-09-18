@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Счетчик #' . $counter->id)
+@section('title', 'Счетчик ' . $counter->resource->name)
 
 @section('content')
-    <h1>Счетчик #{{ $counter->id }}</h1>
+    <h1>Счетчик {{ $counter->resource->name }}</h1>
 
     <div class="row">
         <div class="col-md-6">
@@ -39,5 +39,11 @@
         </div>
     </div>
 
-    <a href="/counters" class="btn btn-secondary">← Назад к списку счетчиков</a>
+    <div class="mt-3">
+        @if(str_contains(url()->previous(), '/counters') && !str_contains(url()->previous(), '/counters/' . $counter->id))
+            <a href="/counters" class="btn btn-secondary">← Назад к списку счетчиков</a>
+        @else
+            <a href="/flats/{{ $counter->flat->id }}" class="btn btn-secondary">← Назад к квартире</a>
+        @endif
+    </div>
 @endsection

@@ -37,41 +37,36 @@ class PaymentController extends Controller
      * Show the form for editing the specified payment.
      */
     public function edit($id)
-    {
-        if (!Gate::allows('manage-payment')) {
-            return back()->withErrors(['error' => 'У вас нет прав для редактирования платежей']);
-        }
-
-        $payment = Payment::with('flat.house')->findOrFail($id);
-        $flats = Flat::with('house')->get();
-
-        return view('payments.edit', compact('payment', 'flats'));
+{
+    if (!Gate::allows('manage-payment')) {
+        return back()->withErrors(['error' => 'У вас нет прав для редактирования платежей']);
     }
+
+    $payment = Payment::with('flat.house')->findOrFail($id);
+    $periods = \App\Models\Period::orderBy('sequence', 'desc')->get();
+
+    return view('payments.edit', compact('payment', 'periods'));
+}
 
     /**
      * Update the specified payment in storage.
      */
     public function update(Request $request, $id): RedirectResponse
-    {
-        if (!Gate::allows('manage-payment')) {
-            return back()->withErrors(['error' => 'У вас нет прав для редактирования платежей']);
-        }
-
-        $payment = Payment::findOrFail($id);
-
-        $validated = $request->validate([
-            'flat_id' => 'required|exists:flats,id',
-            'amount' => 'required|numeric|min:0',
-            'payment_date' => 'required|date',
-            'type' => 'required|string|max:255',
-            'status' => 'required|string|max:50',
-            'description' => 'nullable|string'
-        ]);
-
-        $payment->update($validated);
-
-        return redirect('/payments')->withErrors(['success' => 'Платеж успешно обновлен']);
+{
+    if (!Gate::allows('manage-payment')) {
+        return back()->withErrors(['error' => 'У вас нет прав для редактирования платежей']);
     }
+
+    $validated = $request->validate([
+        'id_period' => 'required|exists:periods,id',
+        'sum' => 'required|numeric|min:0',
+    ]);
+
+    $payment = Payment::findOrFail($id);
+    $payment->update($validated);
+
+    return redirect('/payments')->with('success', 'Платёж успешно обновлён');
+}
 
     public function destroy($id)
     {
