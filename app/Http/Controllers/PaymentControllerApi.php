@@ -7,43 +7,27 @@ use Illuminate\Http\Request;
 
 class PaymentControllerApi extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return response(Payment::all());
+        $page = $request->query('page', 0);
+        $perpage = $request->query('perpage', 5);
+
+        $payments = Payment::with(['flat.house', 'period'])
+            ->orderBy('created_at', 'desc')
+            ->skip($page * $perpage)
+            ->take($perpage)
+            ->get();
+
+        return response()->json($payments);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function total()
     {
-        //
+        return response()->json(['total' => Payment::count()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        return response(Payment::find($id));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response(Payment::with(['flat.house', 'period'])->find($id));
     }
 }
